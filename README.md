@@ -1,28 +1,25 @@
-# Mein Archiv – iPhone-PWA, Version 0.1
+# Mein Archiv – iPhone v0.3
 
-## Funktionsumfang
-- Kamera-/Bildimport sowie PDF- und Mail-Anhang-Import aus der Dateien-App.
-- Speicherung der Originaldatei im Browser (IndexedDB).
-- Regelbasierte Kategorievorschläge, editierbarer Name und Dokumentdatum, Suche in Name/Kategorie/manuell hinterlegtem Text, SHA-256-Dublettencheck identischer Dateien.
-- **Optional** OCR von Bildern mit Tesseract.js (Internetverbindung und externe CDN-Bibliothek beim erstmaligen Aufruf erforderlich). Noch **keine PDF-OCR**.
-- Einzeldatei-Export über iOS Teilen-Menü bzw. Download. Im Teilen-Menü „In Dateien sichern“ → „iCloud Drive“ auswählen.
-- Export einer CSV-Übersicht.
+## GitHub Pages aktualisieren
+1. Dieses ZIP entpacken. **Den Inhalt des Ordners** `MeinArchiv_v03_iPhone` (nicht den Ordner selbst) in das bestehende GitHub-Pages-Repository hochladen.
+2. Bestehende `index.html`, `sw.js`, `manifest.webmanifest` und `icon.svg` ersetzen bzw. überschreiben und Änderungen committen.
+3. In Safari die GitHub-Pages-Adresse öffnen und ggf. einmal neu laden. PWA erneut öffnen.
 
-## Installation ohne Mac
-1. Dateien dieses Verzeichnisses auf einen HTTPS-Webhost hochladen, z. B. GitHub Pages oder Netlify. `index.html` muss zusammen mit `sw.js`, `manifest.webmanifest` und `icon.svg` im gleichen Verzeichnis liegen.
-2. HTTPS-Adresse auf dem iPhone mit Safari öffnen.
-3. Teilen → „Zum Home-Bildschirm“ → „Hinzufügen“.
-4. Kamera-/PDF-Import testen. Für mehrseitige Scans zuerst in Apples Dateien-App scannen und die erzeugte PDF importieren.
-5. Dokumente einzeln exportieren und im iCloud-Drive-Ordner (z. B. `Dokumentenarchiv/Versicherungen`) speichern. In dieser ersten Version wird die Kategorie nicht automatisch als iCloud-Ordner angelegt.
+## Mehrseiten-Dokumente
+- **Fotografieren**: erste Seite aufnehmen.
+- **＋ Seite fotografieren**: weitere Seiten aufnehmen.
+- Mit Pfeilen sortieren, ↻ drehen, × löschen.
+- **Mehrseiten-PDF erstellen** zeigt die zusammengefasste Datei an; **Ins Archiv aufnehmen** erstellt ebenfalls ein PDF aus allen Seiten.
+- Ein einzelnes Foto wird in Version 0.3 ebenfalls zu einer PDF.
+- Zur PDF-Erstellung wird die öffentliche JavaScript-Bibliothek pdf-lib beim ersten Einsatz von jsDelivr geladen. Keine bewusste Dokumentenübertragung an diesen Server, aber externe Skripte sind ein Vertrauensrisiko. Keine Offline-Garantie beim ersten PDF-Export.
 
-## Wichtige Grenzen
-- Dies ist **kein** nativer Dokumentenscanner: kein Perspektivbeschnitt, keine automatische Kantenerkennung, kein mehrseitiger Fotoworkflow. Fotos bleiben JPG/PNG, PDFs bleiben PDFs.
-- iOS-Safari-Web-Apps haben keinen frei verfügbaren Hintergrundzugriff auf iCloud Drive. **Keine automatische iCloud-Ablage oder Synchronisation**; das Browserarchiv kann bei Löschung von Websitedaten verloren gehen.
-- Kein automatisches Einlesen von E-Mails und kein Hintergrundjob. Mail-Anhänge zunächst manuell aus Mail/Dateien importieren.
-- Kein serverbasierter KI-Dienst, keine trainierte Dokumentenklassifikation, kein zuverlässiges Datum-/Absender-Parsing.
-- Diese Demo-Version ist für erste Erfassung und lokale Nutzung, nicht als einzige dauerhafte Dokumentenablage geeignet. Dokumente über iCloud sichern, bevor du das Browserarchiv bereinigst.
-- Für vollautomatischen iCloud-Mail-Ablage-Workflow wären beispielsweise iOS Kurzbefehle, iCloud-Ordneraktionen auf einem Mac oder eine separat autorisierte E-Mail-Integration samt sicherem Backend nötig. Im nächsten Ausbau API/Auth, OCR von PDFs, Datenbank, automatischer iCloud-Sync über eine zulässige Apple-Integration und Regelverwaltung planen.
-- Das `icon.svg` kann als Homescreen-Icon je nach iOS-Version abweichen; für breite Kompatibilität kann zusätzlich ein 180x180 PNG generiert werden.
+## Titel und Datum
+- Datum steht **immer** vorne (YYYY-MM-DD). Eingabefeld `Dokumentdatum` kontrollieren: Die App kennt bei Fotos zunächst nur das aktuelle Datum, erkennt den tatsächlichen Briefdatumswert noch nicht zuverlässig.
+- Vorschlag basiert auf Schlagworten im Dateinamen/ggf. OCR und Kategorie, nicht auf KI. Titel vor dem Speichern korrigierbar.
 
-## Datenschutz
-Lokale Dateien werden in IndexedDB gehalten. OCR lädt Tesseract.js von jsDelivr und Sprachdaten aus der Tesseract.js-Konfiguration. Keine eigene Server-Verarbeitung der Dokumente vorgesehen. Wenn du einen Drittanbieterhost verwendest, prüfe dessen Datenschutzbedingungen. Kein Authentifizierungsmechanismus außer iPhone-/Browser-Schutz.
+## Grenzen
+- Speicherung lokal im Safari-Browser und erst nach explizitem Export in iCloud Drive. Die iPhone-App ist weiterhin nicht direkt mit dem Windows-Importdienst verbunden.
+- Keine automatische iCloud-Synchronisation aus der Web-App. Große PDFs können den lokalen Speicherplatz belasten.
+- Bestehende v0.1-Dokumente bleiben im selben IndexedDB-Speicher; die Dateinamen werden nicht nachträglich umbenannt.
+- Keine automatische Kameraranderkennung und keine sichere automatische OCR aus allen PDF-Seiten.
+- Sensible Dateien nicht im GitHub-Repository hochladen.
